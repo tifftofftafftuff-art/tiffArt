@@ -6,6 +6,11 @@
   // Must match the existing Worker name in the Cloudflare dashboard.
   "name": "tiffart",
   "compatibility_date": "2026-08-08",
+  // Wrangler runs this before every deploy, so `npx wrangler deploy` works
+  // even when the Cloudflare project's separate "build command" is unset.
+  "build": {
+    "command": "npm run build"
+  },
   "assets": {
     "directory": "./dist",
     // Serve dist/404.html for unknown paths.
