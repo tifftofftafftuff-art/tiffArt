@@ -1,0 +1,33 @@
+---
+import { getEntry, render } from 'astro:content';
+import { Picture } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const siteEntry = await getEntry('site', 'index');
+if (!siteEntry) throw new Error('Missing site singleton: src/content/site/index.md');
+const site = siteEntry.data;
+const { Content } = await render(siteEntry);
+---
+
+<BaseLayout title="About" description={`About ${site.artistName}`}>
+  <h1>About</h1>
+  <div class="about-page">
+    {
+      site.portrait && (
+        <figure class="about-portrait">
+          <Picture
+            src={site.portrait}
+            formats={['avif', 'webp']}
+            widths={[400, 640, 960]}
+            sizes="(max-width: 56rem) 100vw, 22rem"
+            alt={`Portrait of ${site.artistName}`}
+            loading="eager"
+          />
+        </figure>
+      )
+    }
+    <div class="prose">
+      <Content />
+    </div>
+  </div>
+</BaseLayout>

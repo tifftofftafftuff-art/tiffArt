@@ -1,0 +1,30 @@
+---
+import { Picture } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  artwork: CollectionEntry<'artworks'>;
+  /** Eager-load the first few cards (above the fold); lazy-load the rest. */
+  eager?: boolean;
+}
+
+const { artwork, eager = false } = Astro.props;
+const { title, image, year, medium } = artwork.data;
+const meta = [year, medium].filter(Boolean).join(' · ');
+---
+
+<li class="artwork-card">
+  <a href={`/work/${artwork.id}/`}>
+    <Picture
+      class="artwork-card-image"
+      src={image}
+      formats={['avif', 'webp']}
+      widths={[400, 640, 960]}
+      sizes={`(max-width: 40rem) 100vw, (max-width: 72rem) 50vw, 24rem`}
+      alt={title}
+      loading={eager ? 'eager' : 'lazy'}
+    />
+    <h3 class="artwork-card-title">{title}</h3>
+    {meta && <p class="artwork-card-meta">{meta}</p>}
+  </a>
+</li>

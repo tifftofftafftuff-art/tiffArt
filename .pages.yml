@@ -1,0 +1,110 @@
+# Pages CMS configuration — https://pagescms.org/docs/
+#
+# This file drives the editing UI at https://app.pagescms.org after the
+# Pages CMS GitHub App is installed on this repository. The artist manages
+# all content here; templates never need to be touched.
+
+media:
+  input: src/assets/media
+  output: ../../assets/media
+  extensions: [jpg, jpeg, png, webp, avif, gif]
+
+content:
+  - name: artworks
+    label: Artworks
+    description: Add, edit, and reorder the works shown in the gallery.
+    type: collection
+    path: src/content/artworks
+    filename: '{fields.title}.md'
+    view:
+      fields: [image, title, year, series, featured, sortOrder]
+      primary: title
+      sort: [sortOrder, title, year]
+      default:
+        sort: sortOrder
+        order: asc
+    fields:
+      - name: title
+        label: Title
+        type: string
+        required: true
+      - name: image
+        label: Image
+        description: Upload the artwork photo. Large images are fine — the site resizes them automatically.
+        type: image
+        required: true
+      - name: year
+        label: Year created
+        type: number
+      - name: medium
+        label: Medium (e.g. oil on canvas)
+        type: string
+      - name: dimensions
+        label: Dimensions (e.g. 36 × 48 in)
+        type: string
+      - name: series
+        label: Series
+        description: 'Optional: works with the same series name are grouped together in the gallery.'
+        type: string
+      - name: featured
+        label: Featured
+        description: Featured works appear first in the gallery.
+        type: boolean
+        default: false
+      - name: sortOrder
+        label: Sort order
+        description: Lower numbers appear first (within featured and non-featured groups).
+        type: number
+        default: 0
+      - name: available
+        label: Available for sale
+        description: Leave unset to hide availability on the artwork page.
+        type: boolean
+      - name: body
+        label: Description
+        description: 'Optional: a longer description shown on the artwork''s own page.'
+        type: rich-text
+
+  - name: site
+    label: Site settings
+    description: Site title, artist bio, portrait, and contact details.
+    type: file
+    path: src/content/site/index.md
+    fields:
+      - name: siteTitle
+        label: Site title
+        description: Shown in the header and browser tab.
+        type: string
+        required: true
+      - name: artistName
+        label: Artist name
+        type: string
+        required: true
+      - name: tagline
+        label: Tagline
+        description: 'A short line describing the work (e.g. "Paintings & works on paper").'
+        type: string
+      - name: portrait
+        label: Portrait photo
+        description: Shown on the About page.
+        type: image
+      - name: email
+        label: Contact email
+        type: string
+      - name: socialLinks
+        label: Social links
+        type: object
+        list: true
+        fields:
+          - name: label
+            label: Name (e.g. Instagram)
+            type: string
+            required: true
+          - name: url
+            label: Link (full address, starting with https://)
+            type: string
+            required: true
+      - name: body
+        label: Bio / artist statement
+        description: Shown on the About page next to the portrait.
+        type: rich-text

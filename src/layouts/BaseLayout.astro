@@ -1,0 +1,78 @@
+---
+import { getEntry } from 'astro:content';
+import '../styles/global.css';
+
+interface Props {
+  /** Page-specific part of the <title>; the site title is appended. */
+  title?: string;
+  description: string;
+  /** Absolute URL for og:image (pass only when one is available). */
+  ogImage?: string | undefined;
+}
+
+const { title, description, ogImage } = Astro.props;
+
+const siteEntry = await getEntry('site', 'index');
+if (!siteEntry) throw new Error('Missing site singleton: src/content/site/index.md');
+const site = siteEntry.data;
+
+const fullTitle = title ? `${title} — ${site.siteTitle}` : site.siteTitle;
+
+// Absolute URLs only when Astro.site is known (Cloudflare sets CF_PAGES_URL
+// at build time). Before that, canonical/og:url are simply omitted rather
+// than pointing at a wrong hardcoded domain.
+const canonicalUrl = Astro.site
+  ? new URL(Astro.url.pathname, Astro.site).href
+  : undefined;
+
+const navItems = [
+  { href: '/', label: 'Work' },
+  { href: '/about/', label: 'About' },
+  { href: '/contact/', label: 'Contact' },
+];
+
+const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isCurrent = (href: string) => (href.replace(/\/$/, '') || '/') === currentPath;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:site_name" content={site.siteTitle} />
+    {canonicalUrl && <meta property="og:url" content={canonicalUrl} />}
+    {ogImage && <meta property="og:image" content={ogImage} />}
+    <meta name="twitter:card" content={ogImage ? 'summary_large_image' : 'summary'} />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <p class="site-title"><a href="/">{site.siteTitle}</a></p>
+      <nav class="site-nav" aria-label="Main">
+        <ul>
+          {navItems.map((item) => (
+            <li>
+              <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>
+                {item.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </header>
+    <main id="main" class="site-main">
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <p>© {new Date().getFullYear()} {site.artistName}. All rights reserved.</p>
+    </footer>
+  </body>
+</html>

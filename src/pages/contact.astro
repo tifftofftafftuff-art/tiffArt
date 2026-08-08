@@ -1,0 +1,42 @@
+---
+import { getEntry } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ContactForm from '../components/ContactForm.astro';
+
+const siteEntry = await getEntry('site', 'index');
+if (!siteEntry) throw new Error('Missing site singleton: src/content/site/index.md');
+const site = siteEntry.data;
+---
+
+<BaseLayout title="Contact" description={`Get in touch with ${site.artistName}`}>
+  <h1>Contact</h1>
+  <div class="prose">
+    <p>
+      For inquiries about available work, commissions, or anything else, send a
+      message below{site.email && (
+        <>
+          {' '}or email <a href={`mailto:${site.email}`}>{site.email}</a>
+        </>
+      )}.
+    </p>
+  </div>
+
+  <ContactForm email={site.email} />
+
+  {
+    site.socialLinks.length > 0 && (
+      <section aria-label="Elsewhere">
+        <h2>Elsewhere</h2>
+        <ul class="social-links">
+          {site.socialLinks.map((link) => (
+            <li>
+              <a href={link.url} rel="me noopener">
+                {link.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+</BaseLayout>

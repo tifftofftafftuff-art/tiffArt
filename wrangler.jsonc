@@ -1,0 +1,17 @@
+// Cloudflare Workers config — this project deploys as a static-assets-only
+// Worker (no server code). `npx wrangler deploy` uploads ./dist.
+// Docs: https://developers.cloudflare.com/workers/static-assets/
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  // Must match the existing Worker name in the Cloudflare dashboard.
+  "name": "tiffart",
+  "compatibility_date": "2026-08-08",
+  "assets": {
+    "directory": "./dist",
+    // Serve dist/404.html for unknown paths.
+    "not_found_handling": "404-page",
+    // Astro builds directory-style URLs (/about/index.html); this redirects
+    // /about -> /about/ so both forms work.
+    "html_handling": "auto-trailing-slash"
+  }
+}

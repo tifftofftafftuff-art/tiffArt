@@ -1,0 +1,62 @@
+---
+import { getCollection, render } from 'astro:content';
+import { Picture, getImage } from 'astro:assets';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const artworks = await getCollection('artworks');
+  return artworks.map((artwork) => ({
+    params: { slug: artwork.id },
+    props: { artwork },
+  }));
+}
+
+const { artwork } = Astro.props;
+const { title, image, year, medium, dimensions, series, available } = artwork.data;
+const { Content } = await render(artwork);
+const hasDescription = Boolean(artwork.body?.trim());
+
+const metaParts = [year, medium, dimensions].filter(Boolean);
+const description =
+  metaParts.length > 0
+    ? `${title} — ${metaParts.join(', ')}`
+    : `${title} — artwork detail`;
+
+// og:image needs an absolute URL; only emit it when the site URL is known.
+const ogAsset = await getImage({ src: image, width: 1200, format: 'jpeg' });
+const ogImage = Astro.site ? new URL(ogAsset.src, Astro.site).href : undefined;
+---
+
+<BaseLayout title={title} description={description} ogImage={ogImage}>
+  <a class="back-link" href="/">&larr; All work</a>
+  <article class="artwork-page">
+    <figure class="artwork-figure">
+      <Picture
+        src={image}
+        formats={['avif', 'webp']}
+        widths={[640, 960, 1280, 1600]}
+        sizes="(max-width: 56rem) 100vw, 48rem"
+        alt={title}
+        loading="eager"
+        fetchpriority="high"
+      />
+    </figure>
+    <div class="artwork-details">
+      <h1>{title}</h1>
+      <ul class="artwork-meta">
+        {year && <li>{year}</li>}
+        {medium && <li>{medium}</li>}
+        {dimensions && <li>{dimensions}</li>}
+        {series && <li>Series: {series}</li>}
+        {available !== undefined && <li>{available ? 'Available' : 'Not available'}</li>}
+      </ul>
+      {
+        hasDescription && (
+          <div class="artwork-description prose">
+            <Content />
+          </div>
+        )
+      }
+    </div>
+  </article>
+</BaseLayout>

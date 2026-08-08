@@ -1,0 +1,59 @@
+---
+import { getCollection, getEntry } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ArtworkCard from '../components/ArtworkCard.astro';
+
+const siteEntry = await getEntry('site', 'index');
+const site = siteEntry!.data;
+
+const artworks = await getCollection('artworks');
+
+// Featured works first, then by sortOrder, then newest year.
+const sorted = [...artworks].sort(
+  (a, b) =>
+    Number(b.data.featured) - Number(a.data.featured) ||
+    a.data.sortOrder - b.data.sortOrder ||
+    (b.data.year ?? 0) - (a.data.year ?? 0),
+);
+
+// Group by series (in order of first appearance); works without a series
+// fall into a trailing ungrouped section. If no series exist at all, the
+// gallery renders as one flat grid.
+const seriesNames = [
+  ...new Set(sorted.map((a) => a.data.series).filter((s): s is string => Boolean(s))),
+];
+const ungrouped = sorted.filter((a) => !a.data.series);
+const sections =
+  seriesNames.length > 0
+    ? [
+        ...(ungrouped.length > 0 ? [{ heading: undefined, works: ungrouped }] : []),
+        ...seriesNames.map((name) => ({
+          heading: name,
+          works: sorted.filter((a) => a.data.series === name),
+        })),
+      ]
+    : [{ heading: undefined, works: sorted }];
+
+const description = site.tagline
+  ? `${site.artistName} — ${site.tagline}`
+  : `Portfolio of ${site.artistName}`;
+
+// Index within the whole page, used to eager-load only the first row or so.
+let renderedCount = 0;
+---
+
+<BaseLayout description={description}>
+  <h1 class="visually-hidden">Work</h1>
+  {
+    sections.map((section) => (
+      <section class="gallery-section" aria-label={section.heading ?? 'Works'}>
+        {section.heading && <h2 class="gallery-section-title">{section.heading}</h2>}
+        <ul class="gallery-grid">
+          {section.works.map((artwork) => (
+            <ArtworkCard artwork={artwork} eager={renderedCount++ < 3} />
+          ))}
+        </ul>
+      </section>
+    ))
+  }
+</BaseLayout>
