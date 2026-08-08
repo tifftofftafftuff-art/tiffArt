@@ -1,6 +1,12 @@
 # Design Handoff Notes
 
-This scaffold is intentionally unstyled beyond a readable baseline. The
+> **Status (2026-08-08):** the design pass has been applied — the "Tiffany
+> Sung Site" comp from Claude Design now lives in `global.css` (tokens +
+> layout), with Google Fonts (Permanent Marker, Gaegu) loaded in
+> `BaseLayout.astro`. The notes below still describe how the theming is
+> structured and remain the guide for any future redesign.
+
+This scaffold was intentionally unstyled beyond a readable baseline. The
 design pass should be a **CSS swap, not a rebuild** — markup, class names,
 and content structure are stable.
 

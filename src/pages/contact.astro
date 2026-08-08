@@ -9,16 +9,19 @@ const site = siteEntry.data;
 ---
 
 <BaseLayout title="Contact" description={`Get in touch with ${site.artistName}`}>
-  <h1>Contact</h1>
+  <h1>{site.contactHeading ?? 'Contact'}</h1>
   <div class="prose">
     <p>
-      For inquiries about available work, commissions, or anything else, send a
-      message below{site.email && (
-        <>
-          {' '}or email <a href={`mailto:${site.email}`}>{site.email}</a>
-        </>
-      )}.
+      {site.contactIntro ??
+        'For inquiries about available work, commissions, or anything else, send a message below.'}
     </p>
+    {
+      site.email && (
+        <p>
+          or email <a href={`mailto:${site.email}`}>{site.email}</a>
+        </p>
+      )
+    }
   </div>
 
   <ContactForm email={site.email} />

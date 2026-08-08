@@ -44,6 +44,7 @@ let renderedCount = 0;
 
 <BaseLayout description={description}>
   <h1 class="visually-hidden">Work</h1>
+  {site.tagline && <p class="gallery-intro">{site.tagline}</p>}
   {
     sections.map((section) => (
       <section class="gallery-section" aria-label={section.heading ?? 'Works'}>

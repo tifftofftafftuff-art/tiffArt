@@ -1,27 +1,43 @@
 /* ==========================================================================
-   Design tokens — the single place the design pass edits.
-   Every color, font, and spacing value used anywhere in the site is defined
-   here as a custom property. See DESIGN-HANDOFF.md.
+   Design tokens — single source of truth for the visual design.
+   Current design: "Tiffany Sung Site" comp (Claude Design, 2026-08-08) —
+   hand-drawn sticker/tape aesthetic on cream paper.
    ========================================================================== */
 :root {
   /* Colors */
-  --color-bg: #ffffff;
-  --color-text: #1a1a1a;
-  --color-text-muted: #595959;
-  --color-accent: #31547d;
-  --color-border: #e0e0e0;
-  --color-surface: #f6f6f6;
+  --color-bg: #faf6ec; /* cream paper */
+  --color-text: #191919; /* ink */
+  --color-text-muted: #6f6a5c; /* warm gray (darkened from comp for contrast) */
+  --color-accent: #ff5ca8; /* pink — link hover */
+  --color-border: #191919; /* ink borders + hard shadows */
+  --color-surface: #ffffff; /* sticker/card white */
+  --color-highlight: #d9f238; /* chartreuse — title highlight, selection, button */
+  --color-active: #ffd23e; /* yellow — active nav, hovers */
+  --color-doodle-blue: #4da3ff;
+  --color-doodle-orange: #ff5b3a;
+  --color-doodle-gold: #d9a614;
+
+  /* Tape tints (gallery card decorations) */
+  --tape-yellow: rgba(255, 210, 62, 0.85);
+  --tape-blue: rgba(77, 163, 255, 0.55);
+  --tape-pink: rgba(255, 92, 168, 0.5);
 
   /* Typography */
-  --font-display: Georgia, 'Times New Roman', serif;
-  --font-body: system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --text-base: 1rem;
-  --text-sm: 0.875rem;
-  --text-lg: 1.25rem;
-  --text-xl: 1.625rem;
-  --text-2xl: 2.125rem;
-  --leading-body: 1.6;
-  --leading-heading: 1.2;
+  --font-display: 'Permanent Marker', cursive;
+  --font-body: 'Gaegu', 'Comic Sans MS', sans-serif;
+  --text-base: 1.25rem; /* 20px */
+  --text-sm: 1.125rem; /* 18px */
+  --text-lg: 1.5rem; /* 24px */
+  --text-xl: 2.5rem; /* 40px */
+  --text-2xl: 2.75rem; /* 44px */
+  --leading-body: 1.5;
+  --leading-heading: 1.15;
+
+  /* Ink borders & hard shadows */
+  --border-ink: 2.5px solid var(--color-border);
+  --shadow-lg: 6px 7px 0 var(--color-border);
+  --shadow-md: 4px 5px 0 var(--color-border);
+  --shadow-sm: 3px 3px 0 var(--color-border);
 
   /* Spacing scale */
   --space-2xs: 0.25rem;
@@ -33,14 +49,13 @@
   --space-2xl: 5rem;
 
   /* Layout */
-  --content-max-width: 72rem;
-  --prose-max-width: 42rem;
-  --gallery-min-column: 16rem;
+  --content-max-width: 73.75rem; /* 1180px */
+  --prose-max-width: 35rem; /* 560px */
+  --gallery-min-column: 18.75rem; /* 300px masonry column */
 }
 
 /* ==========================================================================
-   Base — minimal, semantic defaults. The design pass may replace everything
-   below the tokens, but the markup and class names stay stable.
+   Base
    ========================================================================== */
 * {
   box-sizing: border-box;
@@ -48,11 +63,17 @@
 
 body {
   margin: 0;
+  position: relative;
   background: var(--color-bg);
   color: var(--color-text);
   font-family: var(--font-body);
   font-size: var(--text-base);
   line-height: var(--leading-body);
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--color-highlight);
 }
 
 h1,
@@ -61,13 +82,24 @@ h3 {
   font-family: var(--font-display);
   line-height: var(--leading-heading);
   font-weight: 400;
+  text-transform: lowercase;
 }
 
-h1 { font-size: var(--text-2xl); }
-h2 { font-size: var(--text-xl); }
-h3 { font-size: var(--text-lg); }
+h1,
+h2 {
+  font-size: var(--text-2xl);
+  transform: rotate(-1.2deg);
+}
+
+h3 {
+  font-size: var(--text-lg);
+}
 
 a {
+  color: var(--color-text);
+}
+
+a:hover {
   color: var(--color-accent);
 }
 
@@ -78,7 +110,7 @@ img {
 }
 
 :focus-visible {
-  outline: 2px solid var(--color-accent);
+  outline: 3px solid var(--color-accent);
   outline-offset: 2px;
 }
 
@@ -98,13 +130,62 @@ img {
   position: absolute;
   left: var(--space-sm);
   top: -100%;
-  background: var(--color-bg);
+  background: var(--color-surface);
+  border: var(--border-ink);
+  box-shadow: var(--shadow-sm);
   padding: var(--space-xs) var(--space-sm);
   z-index: 10;
 }
 
 .skip-link:focus {
   top: var(--space-sm);
+}
+
+/* --------------------------------------------------------------------------
+   Doodle layer — decorative scatter, hidden from assistive tech
+   -------------------------------------------------------------------------- */
+.doodle-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.doodle {
+  position: absolute;
+  line-height: 1;
+}
+
+.doodle-1 {
+  top: 130px;
+  left: 3%;
+  font-size: 44px;
+  color: var(--color-accent);
+  transform: rotate(-14deg);
+}
+
+.doodle-2 {
+  top: 320px;
+  right: 4%;
+  font-size: 38px;
+  color: var(--color-doodle-blue);
+  transform: rotate(18deg);
+}
+
+.doodle-3 {
+  top: 60%;
+  left: 2%;
+  font-size: 40px;
+  color: var(--color-doodle-orange);
+  transform: rotate(9deg);
+}
+
+.doodle-4 {
+  bottom: 140px;
+  right: 6%;
+  font-size: 46px;
+  color: var(--color-doodle-gold);
+  transform: rotate(-11deg);
 }
 
 /* --------------------------------------------------------------------------
@@ -115,61 +196,112 @@ img {
 .site-footer {
   max-width: var(--content-max-width);
   margin-inline: auto;
-  padding-inline: var(--space-md);
+  padding-inline: 5vw;
+  position: relative;
 }
 
 .site-header {
   display: flex;
   flex-wrap: wrap;
-  align-items: baseline;
-  gap: var(--space-md);
-  padding-block: var(--space-lg);
+  align-items: center;
+  gap: var(--space-md) var(--space-lg);
+  padding-block: var(--space-lg) var(--space-xs);
 }
 
 .site-title {
   margin: 0;
   font-family: var(--font-display);
-  font-size: var(--text-lg);
+  font-size: var(--text-xl);
+  text-transform: lowercase;
+  transform: rotate(-2deg);
 }
 
 .site-title a {
   color: inherit;
   text-decoration: none;
+  display: inline-block;
+  background: var(--color-highlight);
+  padding: 2px 14px 6px;
+  box-shadow: var(--shadow-md);
+}
+
+.site-title a:hover {
+  color: inherit;
+  background: var(--color-active);
+}
+
+.site-title::after {
+  content: '\2606'; /* ☆ */
+  font-family: var(--font-body);
+  font-size: 0.65em;
+  margin-left: 10px;
+  display: inline-block;
 }
 
 .site-nav ul {
   display: flex;
-  gap: var(--space-md);
+  gap: var(--space-xs);
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
 .site-nav a {
+  display: inline-block;
   color: var(--color-text);
   text-decoration: none;
+  text-transform: lowercase;
+  font-weight: 700;
+  font-size: var(--text-lg);
+  padding: 2px 14px;
+}
+
+.site-nav li:nth-child(odd) a {
+  transform: rotate(1.5deg);
+}
+
+.site-nav li:nth-child(even) a {
+  transform: rotate(-1.5deg);
+}
+
+.site-nav a:hover {
+  color: var(--color-text);
+  background: var(--color-active);
 }
 
 .site-nav a[aria-current='page'] {
-  text-decoration: underline;
+  background: var(--color-active);
 }
 
 .site-main {
-  padding-block-end: var(--space-2xl);
+  padding-block: var(--space-xs) var(--space-2xl);
 }
 
 .site-footer {
-  padding-block: var(--space-lg);
-  border-top: 1px solid var(--color-border);
-  color: var(--color-text-muted);
+  padding-block: var(--space-md) var(--space-lg);
+  border-top: 2.5px dashed var(--color-border);
   font-size: var(--text-sm);
+  text-transform: lowercase;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs) var(--space-lg);
+}
+
+.site-footer p {
+  margin: 0;
 }
 
 /* --------------------------------------------------------------------------
-   Gallery
+   Gallery — masonry of taped-up sticker cards
    -------------------------------------------------------------------------- */
+.gallery-intro {
+  margin: var(--space-2xs) 0 var(--space-lg);
+  font-size: 1.375rem;
+  transform: rotate(-0.6deg);
+}
+
 .gallery-section {
-  margin-block-start: var(--space-xl);
+  margin-block-start: var(--space-lg);
 }
 
 .gallery-section-title {
@@ -177,12 +309,65 @@ img {
 }
 
 .gallery-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(var(--gallery-min-column), 1fr));
-  gap: var(--space-lg);
+  columns: var(--gallery-min-column);
+  column-gap: 28px;
   list-style: none;
   margin: 0;
   padding: 0;
+}
+
+.artwork-card {
+  break-inside: avoid;
+  margin-bottom: 34px;
+  position: relative;
+  background: var(--color-surface);
+  border: var(--border-ink);
+  box-shadow: var(--shadow-lg);
+  padding: 12px 12px 6px;
+}
+
+.artwork-card:nth-child(4n + 1) {
+  transform: rotate(-1.3deg);
+}
+
+.artwork-card:nth-child(4n + 2) {
+  transform: rotate(1.1deg);
+}
+
+.artwork-card:nth-child(4n + 3) {
+  transform: rotate(-0.7deg);
+}
+
+.artwork-card:nth-child(4n) {
+  transform: rotate(1.6deg);
+}
+
+/* Tape strip across the top edge */
+.artwork-card::before {
+  content: '';
+  position: absolute;
+  top: -13px;
+  left: 30%;
+  width: 96px;
+  height: 26px;
+  background: var(--tape-yellow);
+  transform: rotate(-4deg);
+  border-left: 1px dashed rgba(25, 25, 25, 0.3);
+  border-right: 1px dashed rgba(25, 25, 25, 0.3);
+  z-index: 1;
+}
+
+.artwork-card:nth-child(3n + 2)::before {
+  background: var(--tape-blue);
+  left: 8%;
+  transform: rotate(3deg);
+}
+
+.artwork-card:nth-child(3n)::before {
+  background: var(--tape-pink);
+  left: auto;
+  right: 10%;
+  transform: rotate(-3deg);
 }
 
 .artwork-card a {
@@ -191,27 +376,41 @@ img {
 }
 
 .artwork-card-image {
-  background: var(--color-surface);
+  background: var(--color-bg);
+}
+
+.artwork-card-caption {
+  margin: 8px 2px 4px;
+  font-size: var(--text-base);
+  text-transform: lowercase;
 }
 
 .artwork-card-title {
-  margin: var(--space-xs) 0 0;
-  font-size: var(--text-base);
-  font-family: var(--font-body);
+  font-weight: 700;
 }
 
 .artwork-card-meta {
-  margin: 0;
   color: var(--color-text-muted);
-  font-size: var(--text-sm);
 }
 
 /* --------------------------------------------------------------------------
    Single artwork
    -------------------------------------------------------------------------- */
+.back-link {
+  display: inline-block;
+  margin-block-end: var(--space-lg);
+  background: var(--color-surface);
+  border: 2px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+  padding: 2px 12px;
+  text-decoration: none;
+  text-transform: lowercase;
+  transform: rotate(-1deg);
+}
+
 .artwork-page {
   display: grid;
-  gap: var(--space-lg);
+  gap: var(--space-xl);
 }
 
 @media (min-width: 56rem) {
@@ -223,7 +422,26 @@ img {
 
 .artwork-figure {
   margin: 0;
+  position: relative;
   background: var(--color-surface);
+  border: var(--border-ink);
+  box-shadow: var(--shadow-lg);
+  padding: 12px;
+  transform: rotate(-0.8deg);
+}
+
+.artwork-figure::before {
+  content: '';
+  position: absolute;
+  top: -13px;
+  left: 34%;
+  width: 96px;
+  height: 26px;
+  background: var(--tape-yellow);
+  transform: rotate(-4deg);
+  border-left: 1px dashed rgba(25, 25, 25, 0.3);
+  border-right: 1px dashed rgba(25, 25, 25, 0.3);
+  z-index: 1;
 }
 
 .artwork-details h1 {
@@ -235,15 +453,12 @@ img {
   padding: 0;
   list-style: none;
   color: var(--color-text-muted);
+  text-transform: lowercase;
+  font-size: var(--text-base);
 }
 
 .artwork-description {
   max-width: var(--prose-max-width);
-}
-
-.back-link {
-  display: inline-block;
-  margin-block-end: var(--space-lg);
 }
 
 /* --------------------------------------------------------------------------
@@ -255,19 +470,46 @@ img {
 
 .about-page {
   display: grid;
-  gap: var(--space-lg);
+  gap: var(--space-xl);
 }
 
 @media (min-width: 56rem) {
   .about-page {
-    grid-template-columns: 1fr 2fr;
+    grid-template-columns: minmax(240px, 1fr) 2fr;
+    gap: 46px;
     align-items: start;
   }
 }
 
 .about-portrait {
   margin: 0;
+  position: relative;
   background: var(--color-surface);
+  border: var(--border-ink);
+  box-shadow: var(--shadow-lg);
+  padding: 12px 12px 14px;
+  transform: rotate(-2deg);
+}
+
+.about-portrait::before {
+  content: '';
+  position: absolute;
+  top: -13px;
+  left: 30%;
+  width: 96px;
+  height: 26px;
+  background: var(--tape-yellow);
+  transform: rotate(-4deg);
+  border-left: 1px dashed rgba(25, 25, 25, 0.3);
+  border-right: 1px dashed rgba(25, 25, 25, 0.3);
+  z-index: 1;
+}
+
+.about-portrait figcaption {
+  margin-top: 10px;
+  text-align: center;
+  font-size: 1.1875rem;
+  text-transform: lowercase;
 }
 
 /* --------------------------------------------------------------------------
@@ -276,7 +518,7 @@ img {
 .contact-form {
   display: grid;
   gap: var(--space-md);
-  max-width: var(--prose-max-width);
+  max-width: 32.5rem;
 }
 
 .form-field {
@@ -285,27 +527,57 @@ img {
 }
 
 .form-field label {
-  font-size: var(--text-sm);
+  font-weight: 700;
+  text-transform: lowercase;
 }
 
 .form-field input,
 .form-field textarea {
-  font: inherit;
-  padding: var(--space-xs) var(--space-sm);
-  border: 1px solid var(--color-border);
-  border-radius: 2px;
-  background: var(--color-bg);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  padding: 10px 12px;
+  border: var(--border-ink);
+  border-radius: 0;
+  background: var(--color-surface);
   color: var(--color-text);
+  box-shadow: 4px 4px 0 var(--color-border);
+}
+
+.form-field textarea {
+  resize: vertical;
+}
+
+.form-field:nth-child(odd) input,
+.form-field:nth-child(odd) textarea {
+  transform: rotate(-0.4deg);
+}
+
+.form-field:nth-child(even) input,
+.form-field:nth-child(even) textarea {
+  transform: rotate(0.4deg);
 }
 
 .contact-form button {
-  font: inherit;
-  padding: var(--space-xs) var(--space-md);
-  border: 1px solid var(--color-accent);
-  background: var(--color-accent);
-  color: var(--color-bg);
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  text-transform: lowercase;
+  padding: 10px 30px;
+  border: var(--border-ink);
+  background: var(--color-highlight);
+  color: var(--color-text);
+  box-shadow: 5px 6px 0 var(--color-border);
   cursor: pointer;
   justify-self: start;
+  transform: rotate(-1deg);
+}
+
+.contact-form button:hover {
+  background: var(--color-active);
+}
+
+.contact-form button:active {
+  box-shadow: 2px 2px 0 var(--color-border);
+  translate: 3px 4px;
 }
 
 .honeypot-field {
@@ -323,5 +595,24 @@ img {
   padding: 0;
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-md);
+  gap: 14px;
+  align-items: center;
+}
+
+.social-links a {
+  display: inline-block;
+  background: var(--color-surface);
+  border: 2px solid var(--color-border);
+  padding: 2px 12px;
+  text-decoration: none;
+  text-transform: lowercase;
+  box-shadow: var(--shadow-sm);
+}
+
+.social-links li:nth-child(odd) a {
+  transform: rotate(-1deg);
+}
+
+.social-links li:nth-child(even) a {
+  transform: rotate(1.2deg);
 }

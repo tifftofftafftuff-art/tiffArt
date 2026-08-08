@@ -1,21 +1,25 @@
 ---
-siteTitle: Studio Placeholder
-artistName: Alex Rivera
-tagline: Paintings & works on paper
+siteTitle: tiffany sung
+artistName: Tiffany Sung
+tagline: digital illustration · character design · mixed media — brooklyn, ny
 portrait: ../../assets/media/portrait.jpg
+portraitCaption: me, probably drawing on something
 email: hello@example.com
+aboutHeading: hi, i'm tiff ✋
+contactHeading: say hello!!
+contactIntro: commissions, collabs, zine trades, or just to share a nice picture of a frog. i'll write back.
+footerNote: all doodles hers
 socialLinks:
-  - label: Instagram
-    url: https://instagram.com/example
-  - label: LinkedIn
-    url: https://linkedin.com/in/example
+  - label: instagram @tifftofftafftuff
+    url: https://instagram.com/tifftofftafftuff
+  - label: art account @tifftofftafftuffy
+    url: https://instagram.com/tifftofftafftuffy
 ---
 
-Alex Rivera is a painter working between observation and memory. Their
-recent work explores the shoreline as a shifting boundary — a place where
-light, weather, and time refuse to hold still.
+tiffany sung is an artist making digital illustration, character design, and
+mixed-media things — drawings on photos, zines, window doodles, whatever
+surface holds still long enough.
 
-Rivera studied painting at a placeholder institution and has exhibited in
-group and solo shows. This paragraph is seed content: replace it with the
-artist's real bio and statement through the CMS — this text supports
-**bold**, *italics*, and multiple paragraphs.
+her work is loud, hand-drawn, and usually made with (or about) friends.
+
+*(this bio is a first draft — replace it with tiff's real words in the cms.)*

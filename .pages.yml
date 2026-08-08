@@ -88,8 +88,28 @@ content:
         label: Portrait photo
         description: Shown on the About page.
         type: image
+      - name: portraitCaption
+        label: Portrait caption
+        description: Little caption under the portrait photo.
+        type: string
       - name: email
         label: Contact email
+        type: string
+      - name: aboutHeading
+        label: About page heading
+        description: 'The big heading on the About page (e.g. "hi, i''m tiff").'
+        type: string
+      - name: contactHeading
+        label: Contact page heading
+        description: 'The big heading on the Contact page (e.g. "say hello!!").'
+        type: string
+      - name: contactIntro
+        label: Contact page intro
+        description: Short text above the contact form.
+        type: text
+      - name: footerNote
+        label: Footer note
+        description: 'Shows after your name in the footer (e.g. "all doodles hers").'
         type: string
       - name: socialLinks
         label: Social links

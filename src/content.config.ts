@@ -36,7 +36,12 @@ const site = defineCollection({
       artistName: z.string(),
       tagline: z.string().optional(),
       portrait: image().optional(),
+      portraitCaption: z.string().optional(),
       email: z.string().optional(),
+      aboutHeading: z.string().optional(),
+      contactHeading: z.string().optional(),
+      contactIntro: z.string().optional(),
+      footerNote: z.string().optional(),
       socialLinks: z
         .array(z.object({ label: z.string(), url: z.string().url() }))
         .default([]),

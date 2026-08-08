@@ -43,6 +43,12 @@ const isCurrent = (href: string) => (href.replace(/\/$/, '') || '/') === current
     <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Gaegu:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
     {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
     <meta property="og:type" content="website" />
     <meta property="og:title" content={fullTitle} />
@@ -53,6 +59,12 @@ const isCurrent = (href: string) => (href.replace(/\/$/, '') || '/') === current
     <meta name="twitter:card" content={ogImage ? 'summary_large_image' : 'summary'} />
   </head>
   <body>
+    <div class="doodle-layer" aria-hidden="true">
+      <span class="doodle doodle-1">&#9734;</span>
+      <span class="doodle doodle-2">&#10047;</span>
+      <span class="doodle doodle-3">&#10057;</span>
+      <span class="doodle doodle-4">&#9734;</span>
+    </div>
     <a class="skip-link" href="#main">Skip to content</a>
     <header class="site-header">
       <p class="site-title"><a href="/">{site.siteTitle}</a></p>
@@ -72,7 +84,10 @@ const isCurrent = (href: string) => (href.replace(/\/$/, '') || '/') === current
       <slot />
     </main>
     <footer class="site-footer">
-      <p>© {new Date().getFullYear()} {site.artistName}. All rights reserved.</p>
+      <p>
+        © {new Date().getFullYear()}
+        {site.artistName}{site.footerNote ? ` ☆ ${site.footerNote}` : '. All rights reserved.'}
+      </p>
     </footer>
   </body>
 </html>

@@ -10,7 +10,6 @@ interface Props {
 
 const { artwork, eager = false } = Astro.props;
 const { title, image, year, medium } = artwork.data;
-const meta = [year, medium].filter(Boolean).join(' · ');
 ---
 
 <li class="artwork-card">
@@ -24,7 +23,9 @@ const meta = [year, medium].filter(Boolean).join(' · ');
       alt={title}
       loading={eager ? 'eager' : 'lazy'}
     />
-    <h3 class="artwork-card-title">{title}</h3>
-    {meta && <p class="artwork-card-meta">{meta}</p>}
+    <p class="artwork-card-caption">
+      <span class="artwork-card-title">{title}{year ? `, ${year}` : ''}</span>
+      {medium && <span class="artwork-card-meta">&nbsp;· {medium}</span>}
+    </p>
   </a>
 </li>

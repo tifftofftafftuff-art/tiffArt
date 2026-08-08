@@ -10,7 +10,7 @@ const { Content } = await render(siteEntry);
 ---
 
 <BaseLayout title="About" description={`About ${site.artistName}`}>
-  <h1>About</h1>
+  <h1>{site.aboutHeading ?? 'About'}</h1>
   <div class="about-page">
     {
       site.portrait && (
@@ -23,6 +23,7 @@ const { Content } = await render(siteEntry);
             alt={`Portrait of ${site.artistName}`}
             loading="eager"
           />
+          {site.portraitCaption && <figcaption>{site.portraitCaption}</figcaption>}
         </figure>
       )
     }
