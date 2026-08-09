@@ -24,6 +24,9 @@
     // directly from the static assets for speed.
     "run_worker_first": ["/api/*"]
   },
+  // Don't delete variables/secrets that were added in the Cloudflare
+  // dashboard when deploying from this config.
+  "keep_vars": true,
   "vars": {
     // Comma-separated list of verified GitHub emails allowed into /admin.
     "ADMIN_ALLOWED_EMAILS": "tifftofftafftuff@gmail.com"
