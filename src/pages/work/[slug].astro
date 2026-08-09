@@ -39,6 +39,7 @@ const ogImage = Astro.site ? new URL(ogAsset.src, Astro.site).href : undefined;
         alt={title}
         loading="eager"
         fetchpriority="high"
+        style={`view-transition-name: art-${artwork.id}`}
       />
     </figure>
     <div class="artwork-details">

@@ -22,6 +22,7 @@ const { title, image, year, medium } = artwork.data;
       sizes={`(max-width: 40rem) 100vw, (max-width: 72rem) 50vw, 24rem`}
       alt={title}
       loading={eager ? 'eager' : 'lazy'}
+      style={`view-transition-name: art-${artwork.id}`}
     />
     <p class="artwork-card-caption">
       <span class="artwork-card-title">{title}{year ? `, ${year}` : ''}</span>
