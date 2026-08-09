@@ -63,6 +63,32 @@ Seed placeholder images can be regenerated with `npm run placeholders`.
 `npm run deploy` builds and deploys from a local machine (needs
 `wrangler login`), but the normal path is git push → auto build.
 
+## Admin editing (tufftiff-art.com/admin)
+
+The site has an on-domain editor at `/admin` (Sveltia CMS). Signing in uses
+GitHub under the hood, but access is controlled by this site's own Worker:
+only GitHub accounts whose **verified email** appears in the
+`ADMIN_ALLOWED_EMAILS` list (in `wrangler.jsonc`) are let in. Every save
+commits to `main`, which redeploys the site automatically.
+
+One-time setup:
+
+1. Create a GitHub **OAuth App** (as the repo owner account):
+   github.com → Settings → Developer settings → OAuth Apps → New OAuth App
+   - Homepage URL: `https://tufftiff-art.com`
+   - Authorization callback URL: `https://tufftiff-art.com/api/auth/callback`
+2. Copy the Client ID, generate a Client Secret.
+3. In the Cloudflare dashboard → Workers & Pages → tiffart → Settings →
+   Variables and Secrets, add both as **secrets**:
+   `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET`.
+4. Redeploy (any push, or Retry build).
+
+To allow another editor later: add their email to `ADMIN_ALLOWED_EMAILS`
+in `wrangler.jsonc` — they also need write access to this repo on GitHub.
+
+(Pages CMS via `.pages.yml` still works as an alternative editor at
+app.pagescms.org.)
+
 ## Contact form
 
 Plain HTML form posting to Web3Forms — works without JavaScript. A tiny

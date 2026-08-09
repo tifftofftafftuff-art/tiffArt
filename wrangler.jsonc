@@ -1,10 +1,11 @@
-// Cloudflare Workers config — this project deploys as a static-assets-only
-// Worker (no server code). `npx wrangler deploy` uploads ./dist.
+// Cloudflare Workers config — serves the static Astro build plus a small
+// worker script that brokers GitHub OAuth for the /admin CMS.
 // Docs: https://developers.cloudflare.com/workers/static-assets/
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   // Must match the existing Worker name in the Cloudflare dashboard.
   "name": "tiffart",
+  "main": "worker/index.js",
   "compatibility_date": "2026-08-08",
   // Wrangler runs this before every deploy, so `npx wrangler deploy` works
   // even when the Cloudflare project's separate "build command" is unset.
@@ -13,10 +14,19 @@
   },
   "assets": {
     "directory": "./dist",
+    "binding": "ASSETS",
     // Serve dist/404.html for unknown paths.
     "not_found_handling": "404-page",
     // Astro builds directory-style URLs (/about/index.html); this redirects
     // /about -> /about/ so both forms work.
-    "html_handling": "auto-trailing-slash"
+    "html_handling": "auto-trailing-slash",
+    // Only /api/* goes through the worker script; everything else is served
+    // directly from the static assets for speed.
+    "run_worker_first": ["/api/*"]
+  },
+  "vars": {
+    // Comma-separated list of verified GitHub emails allowed into /admin.
+    "ADMIN_ALLOWED_EMAILS": "tifftofftafftuff@gmail.com"
   }
+  // Secrets (set in dashboard, not here): GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET
 }

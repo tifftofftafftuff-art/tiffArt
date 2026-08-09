@@ -7,10 +7,14 @@ dist/
 # dependencies
 node_modules/
 
+# wrangler local state
+.wrangler/
+
 # environment variables
 .env
 .env.production
 .env.*.local
+.dev.vars
 
 # logs
 npm-debug.log*

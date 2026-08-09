@@ -1,0 +1,95 @@
+# Sveltia CMS configuration (Decap-compatible) for tufftiff-art.com/admin.
+# Sign-in is brokered by this site's own Worker (/api/auth), which only
+# admits the email addresses listed in ADMIN_ALLOWED_EMAILS.
+
+backend:
+  name: github
+  repo: tifftofftafftuff-art/tiffArt
+  branch: main
+  base_url: https://tufftiff-art.com
+  auth_endpoint: /api/auth
+
+media_folder: src/assets/media
+public_folder: ../../assets/media
+
+collections:
+  - name: artworks
+    label: Artworks
+    label_singular: Artwork
+    folder: src/content/artworks
+    create: true
+    delete: true
+    slug: '{{slug}}'
+    summary: '{{title}} ({{year}})'
+    sortable_fields: [sortOrder, title, year]
+    fields:
+      - { name: title, label: Title, widget: string }
+      - name: image
+        label: Image
+        widget: image
+        hint: Upload the artwork photo — large files are fine, the site resizes them.
+      - { name: year, label: Year created, widget: number, value_type: int, required: false }
+      - { name: medium, label: 'Medium (e.g. oil on canvas)', widget: string, required: false }
+      - { name: dimensions, label: 'Dimensions (e.g. 36 × 48 in)', widget: string, required: false }
+      - name: series
+        label: Series
+        widget: string
+        required: false
+        hint: Works with the same series name are grouped together in the gallery.
+      - name: featured
+        label: Featured
+        widget: boolean
+        default: false
+        hint: Featured works appear first in the gallery.
+      - name: sortOrder
+        label: Sort order
+        widget: number
+        value_type: int
+        default: 0
+        hint: Lower numbers appear first.
+      - { name: available, label: Available for sale, widget: boolean, required: false }
+      - name: body
+        label: Description
+        widget: markdown
+        required: false
+        hint: Optional longer text shown on the artwork's own page.
+
+  - name: site
+    label: Site settings
+    files:
+      - name: settings
+        label: Site settings
+        file: src/content/site/index.md
+        fields:
+          - { name: siteTitle, label: Site title, widget: string, hint: Shown in the header and browser tab. }
+          - { name: artistName, label: Artist name, widget: string }
+          - name: tagline
+            label: Tagline
+            widget: string
+            required: false
+            hint: The line under the header on the gallery page.
+          - { name: portrait, label: Portrait photo, widget: image, required: false }
+          - { name: portraitCaption, label: Portrait caption, widget: string, required: false }
+          - { name: email, label: Contact email, widget: string, required: false }
+          - { name: aboutHeading, label: About page heading, widget: string, required: false }
+          - { name: contactHeading, label: Contact page heading, widget: string, required: false }
+          - name: contactIntro
+            label: Contact page intro
+            widget: text
+            required: false
+          - name: footerNote
+            label: Footer note
+            widget: string
+            required: false
+            hint: 'Shows after your name in the footer (e.g. "all doodles hers").'
+          - name: socialLinks
+            label: Social links
+            widget: list
+            required: false
+            fields:
+              - { name: label, label: 'Name (e.g. instagram @handle)', widget: string }
+              - { name: url, label: 'Link (full address, starting with https://)', widget: string }
+          - name: body
+            label: Bio / artist statement
+            widget: markdown
+            hint: Shown on the About page next to the portrait.
