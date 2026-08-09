@@ -30,6 +30,6 @@ photos, and whatever surface holds still long enough.
 
 she studied media & design at marist college, streams digital painting
 sessions as @tifftofftafftuffy, and is currently working on the film
-*alchemist on the divide*.
+_alchemist on the divide_.
 
-*(this bio was drafted from tiff's public profiles — polish it in the cms.)*
+_(this bio was drafted from tiff's public profiles — polish it in the cms.)_
