@@ -1,10 +1,10 @@
 ---
 siteTitle: tiffany sung
 artistName: Tiffany Sung
-tagline: digital illustration · character design · mixed media — brooklyn, ny
+tagline: digital illustration · graphic design · narrative film — atlanta, ga
 portrait: ../../assets/media/portrait.jpg
 portraitCaption: me, probably drawing on something
-email: hello@example.com
+email: tifftofftafftuff@gmail.com
 aboutHeading: hi, i'm tiff ✋
 contactHeading: say hello!!
 contactIntro: commissions, collabs, zine trades, or just to share a nice picture of a frog. i'll write back.
@@ -14,12 +14,22 @@ socialLinks:
     url: https://instagram.com/tifftofftafftuff
   - label: art account @tifftofftafftuffy
     url: https://instagram.com/tifftofftafftuffy
+  - label: twitch
+    url: https://twitch.tv/tifftofftafftuffy
+  - label: tiktok
+    url: https://tiktok.com/@tifftofftafftuffy
+  - label: youtube
+    url: https://youtube.com/@tifftofftafftuffy
+  - label: linkedin
+    url: https://www.linkedin.com/in/tiffany-sung-b30679309/
 ---
 
-tiffany sung is an artist making digital illustration, character design, and
-mixed-media things — drawings on photos, zines, window doodles, whatever
-surface holds still long enough.
+tiffany sung (성기림, she/they) is an artist and filmmaker making digital
+illustration, graphic design, and narrative film — plus doodles on windows,
+photos, and whatever surface holds still long enough.
 
-her work is loud, hand-drawn, and usually made with (or about) friends.
+she studied media & design at marist college, streams digital painting
+sessions as @tifftofftafftuffy, and is currently working on the film
+*alchemist on the divide*.
 
-*(this bio is a first draft — replace it with tiff's real words in the cms.)*
+*(this bio was drafted from tiff's public profiles — polish it in the cms.)*
