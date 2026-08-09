@@ -9,8 +9,11 @@ backend:
   base_url: https://tufftiff-art.com
   auth_endpoint: /api/auth
 
+# Global defaults (must be absolute for Sveltia). Collections below override
+# these with entry-relative paths so frontmatter keeps storing
+# "../../assets/media/…", which Astro's image pipeline requires.
 media_folder: src/assets/media
-public_folder: ../../assets/media
+public_folder: /src/assets/media
 
 collections:
   - name: artworks
@@ -19,6 +22,10 @@ collections:
     folder: src/content/artworks
     create: true
     delete: true
+    # Entry-relative: uploads land in src/assets/media, frontmatter stores
+    # ../../assets/media/<file> (relative to the markdown file).
+    media_folder: '../../assets/media'
+    public_folder: '../../assets/media'
     slug: '{{slug}}'
     summary: '{{title}} ({{year}})'
     sortable_fields: [sortOrder, title, year]
@@ -60,6 +67,8 @@ collections:
       - name: settings
         label: Site settings
         file: src/content/site/index.md
+        media_folder: '../../assets/media'
+        public_folder: '../../assets/media'
         fields:
           - { name: siteTitle, label: Site title, widget: string, hint: Shown in the header and browser tab. }
           - { name: artistName, label: Artist name, widget: string }
