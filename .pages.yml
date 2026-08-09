@@ -65,6 +65,39 @@ content:
         description: 'Optional: a longer description shown on the artwork''s own page.'
         type: rich-text
 
+  - name: videos
+    label: Videos
+    description: Paste video links (YouTube, Twitch, Instagram, TikTok) to show on the videos page.
+    type: collection
+    path: src/content/videos
+    filename: '{fields.title}.md'
+    view:
+      fields: [title, url, sortOrder]
+      primary: title
+      sort: [sortOrder, title]
+      default:
+        sort: sortOrder
+        order: asc
+    fields:
+      - name: title
+        label: Title
+        type: string
+        required: true
+      - name: url
+        label: Video link
+        description: Paste the full link — YouTube video/short, Twitch channel/video/clip, Instagram reel/post, or TikTok video.
+        type: string
+        required: true
+      - name: sortOrder
+        label: Sort order
+        description: Lower numbers appear first.
+        type: number
+        default: 0
+      - name: body
+        label: Note
+        description: 'Optional: a short note shown under the video.'
+        type: rich-text
+
   - name: site
     label: Site settings
     description: Site title, artist bio, portrait, and contact details.

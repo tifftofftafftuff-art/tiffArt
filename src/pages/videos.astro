@@ -1,0 +1,96 @@
+---
+import { getCollection, getEntry, render } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { parseVideoUrl } from '../lib/video';
+
+const siteEntry = await getEntry('site', 'index');
+const site = siteEntry!.data;
+
+const videoEntries = await getCollection('videos');
+const videos = await Promise.all(
+  [...videoEntries]
+    .sort((a, b) => a.data.sortOrder - b.data.sortOrder || a.data.title.localeCompare(b.data.title))
+    .map(async (entry) => {
+      const { Content } = await render(entry);
+      return {
+        entry,
+        embed: parseVideoUrl(entry.data.url),
+        Content,
+        hasNote: Boolean(entry.body?.trim()),
+      };
+    }),
+);
+
+const description = `Streams, reels, and other moving pictures by ${site.artistName}`;
+---
+
+<BaseLayout title="Videos" description={description}>
+  <h1>videos</h1>
+  {
+    videos.length === 0 ? (
+      <div class="prose">
+        <p>nothing here yet — check back soon ☆</p>
+      </div>
+    ) : (
+      <ul class="gallery-grid">
+        {videos.map(({ entry, embed, Content, hasNote }) => (
+          <li class="artwork-card video-card">
+            {embed.kind === 'iframe' && (
+              <div class={`video-frame video-frame--${embed.aspect}`}>
+                <iframe
+                  src={embed.src}
+                  title={entry.data.title}
+                  loading="lazy"
+                  allowfullscreen
+                  allow="autoplay; encrypted-media; picture-in-picture"
+                />
+              </div>
+            )}
+            {embed.kind === 'twitch' && (
+              <div
+                class="video-frame video-frame--wide"
+                data-twitch={embed.params}
+                data-title={entry.data.title}
+              >
+                <a class="video-link-chip" href={entry.data.url} rel="noopener">
+                  watch on twitch ↗
+                </a>
+              </div>
+            )}
+            {embed.kind === 'link' && (
+              <a class="video-link-chip" href={entry.data.url} rel="noopener">
+                watch ↗
+              </a>
+            )}
+            <p class="artwork-card-caption">
+              <span class="artwork-card-title">{entry.data.title}</span>
+            </p>
+            {hasNote && (
+              <div class="video-note">
+                <Content />
+              </div>
+            )}
+          </li>
+        ))}
+      </ul>
+    )
+  }
+
+  <script is:inline>
+    // Twitch's player requires a `parent` param matching the live domain,
+    // which only the browser knows on a static site. With JS disabled the
+    // "watch on twitch" link stays in place instead.
+    document.querySelectorAll('[data-twitch]').forEach((el) => {
+      const params = el.getAttribute('data-twitch');
+      const base = params.startsWith('clip=')
+        ? 'https://clips.twitch.tv/embed'
+        : 'https://player.twitch.tv/';
+      const iframe = document.createElement('iframe');
+      iframe.src = `${base}?${params}&parent=${location.hostname}&autoplay=false`;
+      iframe.title = el.getAttribute('data-title') || 'Twitch player';
+      iframe.loading = 'lazy';
+      iframe.allowFullscreen = true;
+      el.replaceChildren(iframe);
+    });
+  </script>
+</BaseLayout>

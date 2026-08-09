@@ -24,6 +24,20 @@ const artworks = defineCollection({
 });
 
 /**
+ * Videos — one markdown file per video link in src/content/videos/.
+ * The URL is parsed at build time into the right embed (YouTube, Instagram,
+ * TikTok, Twitch); the optional body is a note shown under the player.
+ */
+const videos = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/videos' }),
+  schema: z.object({
+    title: z.string(),
+    url: z.string().url(),
+    sortOrder: z.number().default(0),
+  }),
+});
+
+/**
  * Site singleton — a single markdown file (src/content/site/index.md).
  * Frontmatter holds the structured fields; the markdown body is the
  * artist bio / statement, rendered on the About page.
@@ -48,4 +62,4 @@ const site = defineCollection({
     }),
 });
 
-export const collections = { artworks, site };
+export const collections = { artworks, videos, site };
