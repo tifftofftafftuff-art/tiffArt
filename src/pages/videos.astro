@@ -80,17 +80,43 @@ const description = `Streams, reels, and other moving pictures by ${site.artistN
     // Twitch's player requires a `parent` param matching the live domain,
     // which only the browser knows on a static site. With JS disabled the
     // "watch on twitch" link stays in place instead.
-    document.querySelectorAll('[data-twitch]').forEach((el) => {
-      const params = el.getAttribute('data-twitch');
-      const base = params.startsWith('clip=')
-        ? 'https://clips.twitch.tv/embed'
-        : 'https://player.twitch.tv/';
-      const iframe = document.createElement('iframe');
-      iframe.src = `${base}?${params}&parent=${location.hostname}&autoplay=false`;
-      iframe.title = el.getAttribute('data-title') || 'Twitch player';
-      iframe.loading = 'lazy';
-      iframe.allowFullscreen = true;
-      el.replaceChildren(iframe);
-    });
+    //
+    // Channel embeds are smart: /api/twitch/latest reports live status and
+    // the newest VOD, so an offline channel shows the latest broadcast
+    // instead of Twitch's offline card. If that endpoint isn't configured
+    // (or errors), the plain channel embed is used.
+    (async () => {
+      const els = [...document.querySelectorAll('[data-twitch]')];
+      if (!els.length) return;
+
+      let latest = null;
+      if (els.some((el) => el.getAttribute('data-twitch').startsWith('channel='))) {
+        try {
+          const res = await fetch('/api/twitch/latest');
+          if (res.ok) latest = await res.json();
+        } catch {}
+      }
+
+      els.forEach((el) => {
+        let params = el.getAttribute('data-twitch');
+        if (
+          params.startsWith('channel=') &&
+          latest?.configured &&
+          !latest.live &&
+          latest.vodId
+        ) {
+          params = `video=${latest.vodId}`;
+        }
+        const base = params.startsWith('clip=')
+          ? 'https://clips.twitch.tv/embed'
+          : 'https://player.twitch.tv/';
+        const iframe = document.createElement('iframe');
+        iframe.src = `${base}?${params}&parent=${location.hostname}&autoplay=false`;
+        iframe.title = el.getAttribute('data-title') || 'Twitch player';
+        iframe.loading = 'lazy';
+        iframe.allowFullscreen = true;
+        el.replaceChildren(iframe);
+      });
+    })();
   </script>
 </BaseLayout>

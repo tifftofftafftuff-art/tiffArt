@@ -28,8 +28,8 @@
   --text-base: 1.25rem; /* 20px */
   --text-sm: 1.125rem; /* 18px */
   --text-lg: 1.5rem; /* 24px */
-  --text-xl: 2.5rem; /* 40px */
-  --text-2xl: 2.75rem; /* 44px */
+  --text-xl: clamp(1.875rem, 6.5vw, 2.5rem); /* 40px, shrinks on phones */
+  --text-2xl: clamp(2rem, 7.5vw, 2.75rem); /* 44px, shrinks on phones */
   --leading-body: 1.5;
   --leading-heading: 1.15;
 
@@ -195,6 +195,14 @@ img {
   font-size: 46px;
   color: var(--color-doodle-gold);
   transform: rotate(-11deg);
+}
+
+/* Smaller, quieter doodles on phones so they never crowd the content. */
+@media (max-width: 40rem) {
+  .doodle {
+    font-size: 26px !important;
+    opacity: 0.8;
+  }
 }
 
 /* --------------------------------------------------------------------------
@@ -414,10 +422,16 @@ img {
 
 .video-frame--portrait {
   aspect-ratio: 9 / 16;
+  width: 100%;
+  max-width: 22rem;
+  margin-inline: auto;
 }
 
 .video-frame--tall {
   aspect-ratio: 4 / 5;
+  width: 100%;
+  max-width: 22rem;
+  margin-inline: auto;
 }
 
 .video-frame iframe {
@@ -826,6 +840,17 @@ img {
   .artwork-card:hover {
     translate: 0 -6px;
     box-shadow: 9px 11px 0 var(--color-border);
+  }
+
+  /* Touch feedback — hovers don't exist on phones, so taps get a press. */
+  .artwork-card:active {
+    translate: 0 -3px;
+  }
+
+  .site-nav a:active,
+  .social-links a:active,
+  .back-link:active {
+    translate: 0 2px;
   }
 
   .artwork-card::before {

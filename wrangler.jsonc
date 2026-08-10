@@ -29,7 +29,10 @@
   "keep_vars": true,
   "vars": {
     // Comma-separated list of verified GitHub emails allowed into /admin.
-    "ADMIN_ALLOWED_EMAILS": "tifftofftafftuff@gmail.com"
+    "ADMIN_ALLOWED_EMAILS": "tifftofftafftuff@gmail.com",
+    // Channel used by /api/twitch/latest (live status + latest VOD).
+    "TWITCH_CHANNEL": "tifftofftafftuffy"
   }
-  // Secrets (set in dashboard, not here): GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET
+  // Secrets (set in dashboard, not here): GITHUB_CLIENT_ID,
+  // GITHUB_CLIENT_SECRET, TWITCH_CLIENT_ID, TWITCH_CLIENT_SECRET
 }

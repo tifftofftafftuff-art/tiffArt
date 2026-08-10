@@ -17,14 +17,81 @@ const OAUTH_SCOPE = 'public_repo user:email';
 const STATE_COOKIE = 'admin_oauth_state';
 
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const url = new URL(request.url);
     if (url.pathname === '/api/auth') return startAuth(url, env);
     if (url.pathname === '/api/auth/callback') return finishAuth(request, url, env);
+    if (url.pathname === '/api/twitch/latest') return twitchLatest(url, env, ctx);
     if (url.pathname.startsWith('/api/')) return new Response('Not found', { status: 404 });
     return env.ASSETS.fetch(request);
   },
 };
+
+/**
+ * Live status + latest VOD for the configured Twitch channel, used by the
+ * videos page to show the most recent broadcast when the channel is
+ * offline. Requires TWITCH_CLIENT_ID / TWITCH_CLIENT_SECRET secrets (a
+ * Twitch dev app's client credentials); without them the endpoint reports
+ * configured:false and the page falls back to the plain channel embed.
+ * Responses are cached at the edge for 2 minutes.
+ */
+async function twitchLatest(url, env, ctx) {
+  const jsonResponse = (data, maxAge) =>
+    new Response(JSON.stringify(data), {
+      headers: {
+        'Content-Type': 'application/json',
+        'Cache-Control': `public, max-age=${maxAge}`,
+      },
+    });
+
+  if (!env.TWITCH_CLIENT_ID || !env.TWITCH_CLIENT_SECRET) {
+    return jsonResponse({ configured: false }, 300);
+  }
+
+  const cache = caches.default;
+  const cacheKey = new Request(`${url.origin}/api/twitch/latest`);
+  const cached = await cache.match(cacheKey);
+  if (cached) return cached;
+
+  try {
+    const channel = env.TWITCH_CHANNEL || 'tifftofftafftuffy';
+
+    const tokenRes = await fetch('https://id.twitch.tv/oauth2/token', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        client_id: env.TWITCH_CLIENT_ID,
+        client_secret: env.TWITCH_CLIENT_SECRET,
+        grant_type: 'client_credentials',
+      }),
+    });
+    const { access_token: token } = await tokenRes.json();
+    if (!token) return jsonResponse({ configured: false }, 60);
+
+    const helix = (path) =>
+      fetch(`https://api.twitch.tv/helix/${path}`, {
+        headers: { 'Client-ID': env.TWITCH_CLIENT_ID, Authorization: `Bearer ${token}` },
+      }).then((r) => r.json());
+
+    const [streams, users] = await Promise.all([
+      helix(`streams?user_login=${channel}`),
+      helix(`users?login=${channel}`),
+    ]);
+    const live = (streams.data?.length ?? 0) > 0;
+    const userId = users.data?.[0]?.id;
+    let vodId;
+    if (userId) {
+      const videos = await helix(`videos?user_id=${userId}&first=1`);
+      vodId = videos.data?.[0]?.id;
+    }
+
+    const response = jsonResponse({ configured: true, live, vodId: vodId ?? null }, 120);
+    ctx.waitUntil(cache.put(cacheKey, response.clone()));
+    return response;
+  } catch {
+    return jsonResponse({ configured: false }, 60);
+  }
+}
 
 function startAuth(url, env) {
   if (!env.GITHUB_CLIENT_ID || !env.GITHUB_CLIENT_SECRET) {

@@ -89,6 +89,22 @@ in `wrangler.jsonc` — they also need write access to this repo on GitHub.
 (Pages CMS via `.pages.yml` still works as an alternative editor at
 app.pagescms.org.)
 
+## Twitch smart embed
+
+The videos page upgrades a Twitch *channel* card to show the **latest VOD**
+whenever the channel is offline (live streams still take priority). This
+uses `/api/twitch/latest` on the Worker, which needs a Twitch dev app:
+
+1. dev.twitch.tv/console → Register Your Application (category: Website
+   Integration; OAuth redirect can be `https://localhost` — it's unused).
+2. Copy the Client ID and generate a Client Secret.
+3. Add both as **secrets** on the Worker (same place as the GitHub ones):
+   `TWITCH_CLIENT_ID`, `TWITCH_CLIENT_SECRET`.
+
+Until the secrets exist, the endpoint reports unconfigured and the page
+shows the plain channel embed (offline card when not live). Note VODs only
+exist if "Store past broadcasts" is enabled in Twitch stream settings.
+
 ## Contact form
 
 Plain HTML form posting to Web3Forms — works without JavaScript. A tiny
