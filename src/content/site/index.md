@@ -3,12 +3,13 @@ siteTitle: tiffany sung
 artistName: Tiffany Sung
 tagline: digital illustration · graphic design · narrative film — atlanta, ga
 portrait: ../../assets/media/portrait.jpg
-portraitCaption: me, probably drawing on something
+portraitCaption: The Atlanta Art Fair
 email: tifftofftafftuff@gmail.com
-aboutHeading: hi, i'm tiff ✋
+aboutHeading: What I'm all about!
 contactHeading: say hello!!
-contactIntro: commissions, collabs, zine trades, or just to share a nice picture of a frog. i'll write back.
-footerNote: all doodles hers
+contactIntro: commissions, collabs, zine trades, or just to share a nice picture
+  of a frog. i'll write back.
+footerNote: Introduction
 socialLinks:
   - label: instagram @tifftofftafftuff
     url: https://instagram.com/tifftofftafftuff
@@ -23,13 +24,12 @@ socialLinks:
   - label: linkedin
     url: https://www.linkedin.com/in/tiffany-sung-b30679309/
 ---
-
 tiffany sung (성기림, she/they) is an artist and filmmaker making digital
 illustration, graphic design, and narrative film — plus doodles on windows,
 photos, and whatever surface holds still long enough.
 
 she studied media & design at marist college, streams digital painting
 sessions as @tifftofftafftuffy, and is currently working on the film
-_alchemist on the divide_.
+*alchemist on the divide*.
 
-_(this bio was drafted from tiff's public profiles — polish it in the cms.)_
+*(this bio was drafted from tiff's public profiles — polish it in the cms.)*
