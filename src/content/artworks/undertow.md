@@ -1,14 +1,12 @@
 ---
-title: Undertow
-image: ../../assets/media/undertow.jpg
-year: 2025
-medium: Oil on canvas
-dimensions: 36 × 48 in
-series: Tidal
+title: "Art Deco Smoking Tiger "
+image: ../../assets/media/art deco ii.jpg
+year: 2022
+medium: Digital Painting
+dimensions: 1,800 x 1,200
+series: Illustration
 featured: false
 sortOrder: 2
-available: true
+available: false
 ---
-
-Companion piece to *Morning Tide*, painted from the same vantage point at
-dusk.
+Inspired by Asian Architectural styles, created in my Graphic Design II class.
