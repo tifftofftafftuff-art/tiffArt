@@ -2,7 +2,6 @@
 siteTitle: tiffany sung
 artistName: Tiffany Sung
 tagline: digital illustration · graphic design · narrative film — atlanta, ga
-portrait: ''
 portraitCaption: The Atlanta Art Fair
 email: tifftofftafftuff@gmail.com
 aboutHeading: What I'm all about!
@@ -23,7 +22,6 @@ socialLinks:
   - label: linkedin
     url: https://www.linkedin.com/in/tiffany-sung-b30679309/
 ---
-
 Hello! My name is Tiffany Sung, and I am an avid artist seeking a standard position within the production/entertainment field! I have a background in stage production, and currently designing my own artist identity. I am based in Georgia, United States. I am open to any upcoming projects, so please contact me for inquiries or even helpful criticism!
 
 My art unifies my Korean heritage, silliness, and overall romance of this dark world. I have a dainty eye for bright colors, contrasting tones, and a heart for organic studies. I've been working through digital paintings, graphics, and production for five years. Recently, I have been snipping away with scissors and paper to develop paper collages and puppets. My form of expression is based in stories I day dream about, and I hope to find a team that feels the same!
