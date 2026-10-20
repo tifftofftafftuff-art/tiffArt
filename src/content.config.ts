@@ -11,7 +11,7 @@ const artworks = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/artworks' }),
   schema: ({ image }) =>
     z.object({
-      title: z.string(),
+      title: z.string().trim(),
       image: image(),
       year: z.number().optional(),
       medium: z.string().optional(),

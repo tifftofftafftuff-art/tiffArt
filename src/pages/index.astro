@@ -17,14 +17,18 @@ const sorted = [...artworks].sort(
 );
 
 // Group by series (in order of first appearance); works without a series
-// fall into a trailing ungrouped section. If no series exist at all, the
-// gallery renders as one flat grid.
+// fall into a leading ungrouped section. Headings only appear once some
+// series has two or more works — a heading per lone piece just stacks the
+// gallery into one sparse column — otherwise it renders as one flat grid.
 const seriesNames = [
   ...new Set(sorted.map((a) => a.data.series).filter((s): s is string => Boolean(s))),
 ];
+const hasRealSeries = seriesNames.some(
+  (name) => sorted.filter((a) => a.data.series === name).length > 1,
+);
 const ungrouped = sorted.filter((a) => !a.data.series);
 const sections =
-  seriesNames.length > 0
+  hasRealSeries
     ? [
         ...(ungrouped.length > 0 ? [{ heading: undefined, works: ungrouped }] : []),
         ...seriesNames.map((name) => ({

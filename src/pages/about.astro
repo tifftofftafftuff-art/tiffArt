@@ -11,7 +11,7 @@ const { Content } = await render(siteEntry);
 
 <BaseLayout title="About" description={`About ${site.artistName}`}>
   <h1>{site.aboutHeading ?? 'About'}</h1>
-  <div class="about-page">
+  <div class:list={['about-page', { 'about-page--with-portrait': site.portrait }]}>
     {
       site.portrait && (
         <figure class="about-portrait">

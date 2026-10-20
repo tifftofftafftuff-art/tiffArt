@@ -79,6 +79,11 @@ body {
   font-size: var(--text-base);
   line-height: var(--leading-body);
   overflow-x: hidden;
+  /* Sticky footer: short pages (404, contact) keep the footer at the bottom. */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
 }
 
 ::selection {
@@ -203,6 +208,13 @@ img {
     font-size: 26px !important;
     opacity: 0.8;
   }
+
+  /* The left-hand doodles land on top of the nav and text on narrow
+     screens (the gutter is only 5vw), so phones keep just the right two. */
+  .doodle-1,
+  .doodle-3 {
+    display: none;
+  }
 }
 
 /* --------------------------------------------------------------------------
@@ -211,6 +223,7 @@ img {
 .site-header,
 .site-main,
 .site-footer {
+  width: 100%;
   max-width: var(--content-max-width);
   margin-inline: auto;
   padding-inline: 5vw;
@@ -291,10 +304,14 @@ img {
 }
 
 .site-main {
+  flex: 1;
   padding-block: var(--space-xs) var(--space-2xl);
 }
 
 .site-footer {
+  /* Dashed rule spans the content column only, not the side gutters. */
+  width: calc(min(100%, var(--content-max-width)) - 10vw);
+  padding-inline: 0;
   padding-block: var(--space-md) var(--space-lg);
   border-top: 2.5px dashed var(--color-border);
   font-size: var(--text-sm);
@@ -326,16 +343,20 @@ img {
 }
 
 .gallery-grid {
-  columns: var(--gallery-min-column);
-  column-gap: 28px;
+  /* A grid rather than CSS columns: reading order stays left-to-right (so
+     featured works lead), a few pieces sit side by side instead of stacking
+     down one column, and the tape strips never bleed across columns. */
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--gallery-min-column)), 1fr));
+  gap: 46px 28px;
+  align-items: start;
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
 .artwork-card {
-  break-inside: avoid;
-  margin-bottom: 34px;
+  margin-top: 13px; /* room for the tape strip */
   position: relative;
   background: var(--color-surface);
   border: var(--border-ink);
@@ -407,7 +428,9 @@ img {
 }
 
 .artwork-card-meta {
+  display: block;
   color: var(--color-text-muted);
+  font-size: var(--text-sm);
 }
 
 /* --------------------------------------------------------------------------
@@ -542,7 +565,7 @@ img {
 }
 
 @media (min-width: 56rem) {
-  .about-page {
+  .about-page--with-portrait {
     grid-template-columns: minmax(240px, 1fr) 2fr;
     gap: 46px;
     align-items: start;
